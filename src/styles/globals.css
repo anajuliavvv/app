@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "designer";
+  src: url("/fonts/Designer.otf");
+}
+
+@font-face {
+  font-family: "code-new-roman";
+  src: url("/fonts/Code New Roman.otf");
+}
+
+.title {
+  font-family: "designer";
+}
+
+body {
+  font-family: "code-new-roman";
+}
+
+.last-sale {
+  animation: sale-pop-up 1s normal 0.2s;
+}
+
+@keyframes sale-pop-up {
+  from {
+    background-color: rgb(32, 242, 32);
+  }
+
+  to {
+    background-color: white;
+  }
+}
