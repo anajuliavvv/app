@@ -15,6 +15,9 @@ const config = {
    */
 
   transpilePackages: ["geist"],
+  images: {
+    unoptimized: true,
+  },
 
   output: "export",
 };
