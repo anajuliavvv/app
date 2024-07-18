@@ -23,7 +23,7 @@ export default function LimitSelect() {
         <title>App - Fornecedor7 </title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex min-h-screen flex-col items-center justify-center gap-8 bg-gray-100">
+      <main className="flex min-h-screen flex-col items-center justify-center gap-8 ">
         <div className="mt-[50px] flex flex-col items-center justify-center">
           <Image
             src={"/images/card2.png"}

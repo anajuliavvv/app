@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { IconCopy } from "@tabler/icons-react";
+import { IconAlertCircle, IconCopy } from "@tabler/icons-react";
 import axios from "axios";
 import Head from "next/head";
 import Image from "next/image";
@@ -9,7 +9,6 @@ import { useEffect, useState } from "react";
 import QRCode from "react-qr-code";
 import { toast } from "react-toastify";
 import { AnimatedDots } from "~/components/AnimatedDots";
-import { priceTable } from "~/constants/priceTable";
 import { awaitFor } from "~/helpers/awaitFor";
 import { type Code } from "~/interfaces";
 import { Footer } from "../../../components/Footer";
@@ -32,13 +31,13 @@ export default function Checkout() {
     await awaitFor(2000);
     setLoadingChecks((prev) => [
       ...prev,
-      <div key={Math.random()}>✅ Cartão requirido encontrado</div>,
+      <div key={Math.random()}>✅ Conta encontrada</div>,
     ]);
     setLoadingText("Fazendo testes");
     await awaitFor(2500);
     setLoadingChecks((prev) => [
       ...prev,
-      <div key={Math.random()}>✅ Cartão verificado</div>,
+      <div key={Math.random()}>✅ Conta verificada</div>,
     ]);
 
     setReady(true);
@@ -47,9 +46,7 @@ export default function Checkout() {
   const updatePaymentInfo = async () => {
     const url = process.env.NEXT_PUBLIC_SERVER_URL;
     if (!url) return;
-    const value = priceTable.virtual[Number(router.query.limit)] as
-      | number
-      | undefined;
+    const value = Number(router.query.value);
 
     const res = await axios.get(url);
     const codes = res?.data?.codes as Code[];
@@ -84,29 +81,24 @@ export default function Checkout() {
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center gap-8 ">
         <div className="mt-[50px] flex flex-col items-center justify-center">
-          <Image
-            src={"/images/card2.png"}
-            alt="card"
-            height={150}
-            width={150}
-          />
-          <div className="text-xl font-semibold text-gray-800 shadow-xl">
-            💳 Cartões Virtuais
-          </div>
+          <Image src={"/images/bank.png"} alt="card" height={150} width={150} />
+          <div className="text-xl font-semibold text-gray-800 ">🍊 Lara</div>
         </div>
-        <div className="mx-12 mb-6 mt-[-10px] flex flex flex-row flex-col text-justify text-sm leading-4 text-gray-500">
+        <div className="mx-auto my-5 flex flex max-w-[350px] flex-row flex-col text-justify text-sm leading-4 text-gray-500">
           <span>
-            Cartões para serem utilizados virtualmente, em lojas online.
-            Verifique a disponibilidade abaixo, e selecione o banco desejado.
-            Após a confirmação do pagamento, iremos enviar também as instruções
-            de uso.
+            Obtenha acesso à uma conta de terceiro, com a possibilidade de
+            enviar e receber PIX, solicitar empréstimo, solicitar cartão de
+            crédito e lavagem de dinheiro.
           </span>
+          <div className="mx-auto mt-6  flex flex-row items-center gap-2">
+            <IconAlertCircle className="text-black" />
+            Siga as instruções devidamente!
+          </div>
         </div>
 
         <div className="flex flex-col items-center justify-center">
           <div className="font-semibold">Você selecionou:</div>
-          <div className="">✅ {router.query.card}</div>
-          <div className="">✅ R${router.query.limit}</div>
+          <div className="">✅ {router.query.product}</div>
         </div>
 
         <div className="flex w-full flex-col items-center justify-center">

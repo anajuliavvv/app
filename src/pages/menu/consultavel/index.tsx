@@ -2,55 +2,18 @@ import { IconAlertCircle } from "@tabler/icons-react";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useMemo, useState } from "react";
-import { DefaultDisponibilityMini } from "~/components/disponibilityMinis/DefaultDisponibilityMini";
 import { HighDisponibilityMini } from "~/components/disponibilityMinis/HighDisponibilityMini";
+import { LowDisponibilityMini } from "~/components/disponibilityMinis/LowDisponibilityMini";
 import { MediumDisponibilityMini } from "~/components/disponibilityMinis/MediumDisponibilityMini";
-import { ZeroDisponibilityMini } from "~/components/disponibilityMinis/ZeroDisponibilityMini";
-import { ECard } from "~/enums/EBank";
-import { EDisponibility } from "~/enums/EDisponibilty";
+import { EConsultavel } from "~/enums/EBank";
 import { Footer } from "../../../components/Footer";
 
 export default function Home() {
   const router = useRouter();
-  const disponibilities: Record<ECard, EDisponibility> = useMemo(() => {
-    return {
-      [ECard.BRADESCO]: EDisponibility.HIGH,
-      [ECard.ITAU]: EDisponibility.MEDIUM,
-      [ECard.NUBANK]: EDisponibility.MEDIUM,
-      [ECard.C6]: EDisponibility.LOW,
-      [ECard.SX]: EDisponibility.MEDIUM,
-      [ECard.OUROCARD]: EDisponibility.ZERO,
-    };
-  }, []);
 
-  const [dispoComps, setDispoComps] = useState<Record<ECard, JSX.Element>>({
-    [ECard.BRADESCO]: <DefaultDisponibilityMini />,
-    [ECard.NUBANK]: <DefaultDisponibilityMini />,
-    [ECard.ITAU]: <DefaultDisponibilityMini />,
-    [ECard.C6]: <DefaultDisponibilityMini />,
-    [ECard.SX]: <DefaultDisponibilityMini />,
-    [ECard.OUROCARD]: <DefaultDisponibilityMini />,
-  });
-
-  const getComponent = (disponibility: EDisponibility): JSX.Element => {
-    switch (disponibility) {
-      case EDisponibility.HIGH:
-        return <HighDisponibilityMini />;
-      case EDisponibility.MEDIUM:
-        return <MediumDisponibilityMini />;
-      case EDisponibility.LOW:
-        return <MediumDisponibilityMini />;
-      case EDisponibility.ZERO:
-        return <ZeroDisponibilityMini />;
-      default:
-        return <DefaultDisponibilityMini />;
-    }
-  };
-
-  const handleCardSelect = (card: ECard) => {
+  const handleCardSelect = (card: EConsultavel) => {
     void router.push({
-      pathname: "/menu/virtual/limit-select",
+      pathname: "/menu/consultavel/limit-select",
       query: {
         ...router.query,
         card,
@@ -58,47 +21,36 @@ export default function Home() {
     });
   };
 
-  useEffect(() => {
-    const newDispoComps: Record<ECard, JSX.Element> = {
-      [ECard.BRADESCO]: getComponent(disponibilities[ECard.BRADESCO]),
-      [ECard.NUBANK]: getComponent(disponibilities[ECard.NUBANK]),
-      [ECard.ITAU]: getComponent(disponibilities[ECard.ITAU]),
-      [ECard.C6]: getComponent(disponibilities[ECard.C6]),
-      [ECard.SX]: getComponent(disponibilities[ECard.SX]),
-      [ECard.OUROCARD]: getComponent(disponibilities[ECard.OUROCARD]),
-    };
-    setTimeout(() => {
-      setDispoComps(newDispoComps);
-    }, 1500);
-  }, [disponibilities]);
-
   return (
     <>
       <Head>
         <title>App - Fornecedor7 </title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex min-h-screen flex-col items-center justify-center gap-8 bg-gray-100">
+      <main className="flex min-h-screen flex-col items-center justify-center gap-8 ">
         <div className="mt-[50px] flex flex-col items-center justify-center">
           <Image
-            src={"/images/card3.png"}
+            src={"/images/card-anim.gif"}
             alt="card"
             height={150}
             width={150}
           />
-          <div className="text-xl font-semibold text-gray-800 shadow-xl">
-            💳 Consultáveis
-          </div>
+          <div className=" mt-2 text-2xl font-bold ">Consultáveis</div>
         </div>
-        <div className="mx-12 mb-6 mt-[-10px] flex flex flex-row flex-col text-justify text-sm leading-4 text-gray-500">
+        <div className="mx-auto my-5 flex flex max-w-[350px] flex-row flex-col text-justify  text-sm leading-4 text-gray-500">
           <span>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis
-            eaque voluptas impedit omnis, ex provident excepturi commodi
-            architecto consectetur atque?
+            Obtenha não só o cartão, mas também o acesso aos dados, limite do
+            cartão e aprovação de compras online no aplicativo do titular da
+            conta.
           </span>
-          <div className="mx-auto mt-6  flex flex-row items-center gap-2">
+          <div className="mx-auto my-4  flex flex-row items-center gap-2">
             <IconAlertCircle className="text-black" />
             Siga as instruções devidamente!
+          </div>
+          <div className="">
+            Após confirmação do pagamento na tela de checkout, será exibido os
+            dados de acesso do aplicativo do banco escolhido. Você poderá então
+            baixar o aplicativo correspondente e acessar.
           </div>
         </div>
 
@@ -109,129 +61,112 @@ export default function Home() {
         <div className=" grid grid-cols-2 gap-8 ">
           <button
             className="flex flex-col items-center justify-center"
-            onClick={() => handleCardSelect(ECard.BRADESCO)}
+            onClick={() => handleCardSelect(EConsultavel.BRADESCO)}
           >
             <Image
-              src={"/images/bradesco.png"}
+              src={"/images/bradesco-ct.png"}
               alt="card"
-              className="shadow-outline-custom"
+              className="rounded-xl shadow-outline-custom"
               height={150}
               width={150}
             />
             <div className="mt-4 flex flex-col justify-center gap-2">
-              <div className="px-2 text-xl font-semibold text-gray-800 shadow-xl ">
-                Bradesco
+              <div className="px-2 text-xl font-semibold text-gray-800  ">
+                Bradesco Cartões
               </div>
-              {dispoComps[ECard.BRADESCO]}
+              <HighDisponibilityMini />
             </div>
           </button>
           <button
             className="flex flex-col items-center justify-center"
-            onClick={() => handleCardSelect(ECard.NUBANK)}
+            onClick={() => handleCardSelect(EConsultavel.WAY)}
           >
             <Image
-              src={"/images/nubank.png"}
+              src={"/images/santander-ct.png"}
               alt="card"
-              className="shadow-outline-custom"
+              className="rounded-xl shadow-outline-custom"
               height={150}
               width={150}
             />
             <div className="mt-4 flex flex-col justify-center gap-2">
-              <div className="px-2 text-center text-xl font-semibold text-gray-800 shadow-xl ">
-                Itaú
+              <div className="px-2 text-center text-xl font-semibold text-gray-800  ">
+                Santander Way
               </div>
-              {dispoComps[ECard.NUBANK]}
+              <HighDisponibilityMini />
             </div>
           </button>
           <button
             className="flex flex-col items-center justify-center"
-            onClick={() => handleCardSelect(ECard.ITAU)}
+            onClick={() => handleCardSelect(EConsultavel.ITAU)}
           >
             <Image
-              src={"/images/itau.png"}
+              src={"/images/itau-ct.png"}
               alt="card"
-              className="shadow-outline-custom"
+              className="rounded-xl shadow-outline-custom"
               height={150}
               width={150}
             />
             <div className="mt-4 flex flex-col justify-center gap-2">
-              <div className="px-2 text-center text-xl font-semibold text-gray-800 shadow-xl ">
-                Santander way
+              <div className="px-2 text-center text-xl font-semibold text-gray-800  ">
+                Itaú Cartões
               </div>
-              {dispoComps[ECard.ITAU]}
+              <LowDisponibilityMini />
             </div>
           </button>
 
           <button
             className="flex flex-col items-center justify-center"
-            onClick={() => handleCardSelect(ECard.SX)}
+            onClick={() => handleCardSelect(EConsultavel.CAIXA)}
           >
             <Image
-              src={"/images/sx.png"}
+              src={"/images/caixa-ct.png"}
               alt="card"
-              className="shadow-outline-custom"
+              className="rounded-xl shadow-outline-custom"
               height={150}
               width={150}
             />
             <div className="mt-4 flex flex-col justify-center gap-2">
-              <div className="px-2 text-center text-xl font-semibold text-gray-800 shadow-xl ">
-                hipercard
+              <div className="px-2 text-center text-xl font-semibold text-gray-800  ">
+                Cartões Caixa
               </div>
-              {dispoComps[ECard.SX]}
+              <MediumDisponibilityMini />
+            </div>
+          </button>
+
+          <button
+            className="flex flex-col items-center justify-center"
+            onClick={() => handleCardSelect(EConsultavel.HIPERCARD)}
+          >
+            <Image
+              src={"/images/hipercard-ct.png"}
+              alt="card"
+              className="rounded-xl shadow-outline-custom"
+              height={150}
+              width={150}
+            />
+            <div className="mt-4 flex flex-col justify-center gap-2">
+              <div className="px-2 text-center text-xl font-semibold text-gray-800  ">
+                Hipercard
+              </div>
+              <LowDisponibilityMini />
             </div>
           </button>
           <button
             className="flex flex-col items-center justify-center"
-            onClick={() => handleCardSelect(ECard.OUROCARD)}
+            onClick={() => handleCardSelect(EConsultavel.OUROCARD)}
           >
             <Image
-              src={"/images/ourocard.webp"}
+              src={"/images/ourocard-ct.png"}
               alt="card"
-              className="shadow-outline-custom"
+              className="rounded-xl shadow-outline-custom"
               height={150}
               width={150}
             />
             <div className="mt-4 flex flex-col justify-center gap-2">
-              <div className="px-2 text-center text-xl font-semibold text-gray-800 shadow-xl ">
-                Ourocard - BB
+              <div className="px-2 text-center text-xl font-semibold text-gray-800  ">
+                Ourocard App
               </div>
-              {dispoComps[ECard.OUROCARD]}
-            </div>
-          </button>
-          <button
-            className="flex flex-col items-center justify-center"
-            onClick={() => handleCardSelect(ECard.OUROCARD)}
-          >
-            <Image
-              src={"/images/ourocard.webp"}
-              alt="card"
-              className="shadow-outline-custom"
-              height={150}
-              width={150}
-            />
-            <div className="mt-4 flex flex-col justify-center gap-2">
-              <div className="px-2 text-center text-xl font-semibold text-gray-800 shadow-xl ">
-                monobank - universal card
-              </div>
-              {dispoComps[ECard.OUROCARD]}
-            </div>
-          </button>
-          <button
-            className="flex flex-col items-center justify-center"
-            onClick={() => handleCardSelect(ECard.C6)}
-          >
-            <Image
-              src={"/images/c6.png"}
-              alt="card"
-              className="shadow-outline-custom"
-              height={150}
-              width={150}
-            />
-            <div className="mt-4 flex flex-col justify-center gap-2">
-              <div className="px-2 text-center text-xl font-semibold text-gray-800 shadow-xl ">
-                will bank
-              </div>
-              {dispoComps[ECard.C6]}
+              <MediumDisponibilityMini />
             </div>
           </button>
         </div>

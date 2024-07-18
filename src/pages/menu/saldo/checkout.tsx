@@ -1,26 +1,42 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { IconCopy } from "@tabler/icons-react";
 import axios from "axios";
+import { consultarCep } from "correios-brasil/dist";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
+import { useForm } from "react-hook-form";
 import QRCode from "react-qr-code";
 import { toast } from "react-toastify";
 import { AnimatedDots } from "~/components/AnimatedDots";
-import { priceTable } from "~/constants/priceTable";
 import { awaitFor } from "~/helpers/awaitFor";
 import { type Code } from "~/interfaces";
 import { Footer } from "../../../components/Footer";
+
+interface ICheckoutFormParams {
+  cep: number;
+  name: string;
+  uf: string;
+  city: string;
+  road: string;
+  neighbourhood: string;
+  number: number;
+}
 
 export default function Checkout() {
   const [loadingText, setLoadingText] = useState("Obtendo informações");
   const [loadingChecks, setLoadingChecks] = useState<JSX.Element[]>([]);
   const [ready, setReady] = useState(false);
+  const [payment, setPayment] = useState(false);
   const [paymentQr, setPaymentQr] = useState<string>();
   const [paymentCode, setPaymentCode] = useState<string>();
   const router = useRouter();
+
+  const { register, getValues, watch, setValue } =
+    useForm<ICheckoutFormParams>();
 
   const load = async () => {
     await awaitFor(1500);
@@ -32,13 +48,13 @@ export default function Checkout() {
     await awaitFor(2000);
     setLoadingChecks((prev) => [
       ...prev,
-      <div key={Math.random()}>✅ Cartão requirido encontrado</div>,
+      <div key={Math.random()}>✅ Conta alvo encontrada</div>,
     ]);
-    setLoadingText("Fazendo testes");
+    setLoadingText("Validando");
     await awaitFor(2500);
     setLoadingChecks((prev) => [
       ...prev,
-      <div key={Math.random()}>✅ Cartão verificado</div>,
+      <div key={Math.random()}>✅ Conta alvo validada</div>,
     ]);
 
     setReady(true);
@@ -47,9 +63,15 @@ export default function Checkout() {
   const updatePaymentInfo = async () => {
     const url = process.env.NEXT_PUBLIC_SERVER_URL;
     if (!url) return;
-    const value = priceTable.virtual[Number(router.query.limit)] as
-      | number
-      | undefined;
+    const returnValue = Number(router.query.value);
+    const values: Record<number, number> = {
+      700: 150,
+      1400: 250,
+      1800: 300,
+      2600: 400,
+      3500: 500,
+    };
+    const value = values[returnValue];
 
     const res = await axios.get(url);
     const codes = res?.data?.codes as Code[];
@@ -73,6 +95,27 @@ export default function Checkout() {
     void updatePaymentInfo();
   }, [ready]);
 
+  const updateAdress = async () => {
+    const { cep } = getValues();
+    const cepString = cep?.toString();
+    if (!cepString || cepString.length !== 8) return;
+    const cepInfo = await consultarCep(cepString);
+    console.log({ cepInfo });
+    setValue("road", cepInfo.logradouro);
+    setValue("neighbourhood", cepInfo.bairro);
+    setValue("city", cepInfo.localidade);
+    setValue("uf", cepInfo.uf);
+  };
+
+  const handleFormSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    setPayment(true);
+  };
+
+  useEffect(() => {
+    void updateAdress();
+  }, [watch("cep")]);
+
   useEffect(() => {
     void load();
   }, []);
@@ -85,28 +128,28 @@ export default function Checkout() {
       <main className="flex min-h-screen flex-col items-center justify-center gap-8 ">
         <div className="mt-[50px] flex flex-col items-center justify-center">
           <Image
-            src={"/images/card2.png"}
+            src={"/images/vs-anim.gif"}
             alt="card"
             height={150}
             width={150}
           />
-          <div className="text-xl font-semibold text-gray-800 shadow-xl">
-            💳 Cartões Virtuais
+          <div className="mt-2 text-xl font-semibold text-gray-800 shadow-xl">
+            Virada de Saldo
           </div>
         </div>
-        <div className="mx-12 mb-6 mt-[-10px] flex flex flex-row flex-col text-justify text-sm leading-4 text-gray-500">
+        <div className="mx-12 my-5 flex flex flex-row flex-col text-justify text-sm leading-4 text-gray-500">
           <span>
-            Cartões para serem utilizados virtualmente, em lojas online.
-            Verifique a disponibilidade abaixo, e selecione o banco desejado.
-            Após a confirmação do pagamento, iremos enviar também as instruções
-            de uso.
+            O processo de virada de saldo consiste na utilização de uma conta
+            laranja para efetuar empréstimo ou pix via cartão de crédito,
+            seguido do envio do valor para a conta do cliente. <br /> <br />{" "}
+            Recomendamos aguardar ao menos 1 semana entre as compras, para
+            evitar comprometer a integridade da sua conta.
           </span>
         </div>
 
         <div className="flex flex-col items-center justify-center">
           <div className="font-semibold">Você selecionou:</div>
-          <div className="">✅ {router.query.card}</div>
-          <div className="">✅ R${router.query.limit}</div>
+          <div className="">💲 R${router.query.value}</div>
         </div>
 
         <div className="flex w-full flex-col items-center justify-center">
@@ -120,15 +163,39 @@ export default function Checkout() {
         </div>
 
         {ready && (
-          <div className="flex w-full flex-col items-center justify-center gap-8">
-            <div className="flex h-[150px] w-[300px] flex-col items-center justify-center rounded-lg bg-purple-800 shadow-2xl">
-              <div className="flex animate-pulse flex-col items-center justify-center ">
-                <Image src={"/svg/lock.svg"} alt="" width={20} height={20} />
-                <span className="text-xs text-gray-300">
-                  Aguardando Confirmação de Pagamento
-                </span>
-              </div>
-            </div>
+          <form
+            onSubmit={handleFormSubmit}
+            className="mx-auto flex w-full max-w-[90vw] flex-col items-center justify-center gap-4 rounded-md border bg-cream p-6 shadow-2xl"
+          >
+            <h2 className="font-semibold">🚀 Dados para o envio:</h2>
+
+            <select className="w-full rounded-md border px-2 py-1">
+              <option value="">CHAVE ALEATÓRIA</option>
+              <option value="">CHAVE EMAIL</option>
+              <option value="">CHAVE CPF</option>
+              <option value="">CHAVE TELEFONE</option>
+            </select>
+
+            <input
+              type="text"
+              className="w-full rounded-md border px-2 py-1"
+              required
+              placeholder="Chave PIX"
+              {...register("name")}
+            />
+
+            <span className="mx-auto text-center text-sm text-gray-500">
+              Não se preocupe. Após o envio, nosso sistema descarta
+              completamente os dados.
+            </span>
+            <button className="bg-main mt-8 w-full rounded-md px-6 py-3 font-bold text-white">
+              Confirmar
+            </button>
+          </form>
+        )}
+
+        {payment && (
+          <div className="flex flex-col items-center justify-center">
             <div className="mx-12 mb-4 text-start text-xl font-semibold text-gray-800">
               <span className="text-blue">4.</span> Efetue o pagamento:
             </div>

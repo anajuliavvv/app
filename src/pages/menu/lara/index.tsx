@@ -3,20 +3,20 @@ import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { HighDisponibilityMini } from "~/components/disponibilityMinis/HighDisponibilityMini";
-import { LowDisponibilityMini } from "~/components/disponibilityMinis/LowDisponibilityMini";
 import { MediumDisponibilityMini } from "~/components/disponibilityMinis/MediumDisponibilityMini";
-import { ECard } from "~/enums/EBank";
+import { ELara } from "~/enums/EBank";
 import { Footer } from "../../../components/Footer";
 
 export default function Home() {
   const router = useRouter();
 
-  const handleCardSelect = (card: ECard) => {
+  const handleProductSelect = (product: ELara, value: number) => {
     void router.push({
-      pathname: "/menu/fisico/limit-select",
+      pathname: "/menu/lara/checkout",
       query: {
         ...router.query,
-        card,
+        product,
+        value,
       },
     });
   };
@@ -29,20 +29,14 @@ export default function Home() {
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center gap-8 ">
         <div className="mt-[50px] flex flex-col items-center justify-center">
-          <Image
-            src={"/images/card-anim.gif"}
-            alt="card"
-            height={150}
-            width={150}
-          />
-          <div className="text-xl font-semibold text-gray-800">
-            Cartões Físicos
-          </div>
+          <Image src={"/images/bank.png"} alt="card" height={150} width={150} />
+          <div className="text-xl font-semibold text-gray-800 ">🍊 Lara</div>
         </div>
-        <div className="mx-12 mb-6 mt-[-10px] flex flex flex-row flex-col text-justify text-sm leading-4 text-gray-500">
+        <div className="mx-auto my-5 flex flex max-w-[350px] flex-row flex-col text-justify text-sm leading-4 text-gray-500">
           <span>
-            Cartões físicos enviados discretamente até o endereço informado.
-            Nossos pacotes vão camuflados, sem riscos ao cliente.
+            Obtenha acesso à uma conta de terceiro, com a possibilidade de
+            enviar e receber PIX, solicitar empréstimo, solicitar cartão de
+            crédito e lavagem de dinheiro.
           </span>
           <div className="mx-auto mt-6  flex flex-row items-center gap-2">
             <IconAlertCircle className="text-black" />
@@ -57,110 +51,78 @@ export default function Home() {
         <div className=" grid grid-cols-2 gap-8 ">
           <button
             className="flex flex-col items-center justify-center"
-            onClick={() => handleCardSelect(ECard.BRADESCO)}
+            onClick={() => handleProductSelect(ELara.NUBANK, 100)}
           >
             <Image
-              src={"/images/bradesco.png"}
+              src={"/images/nubank-lara.png"}
               alt="card"
-              className="shadow-outline-custom"
+              className="rounded-xl shadow-outline-custom"
               height={150}
               width={150}
             />
             <div className="mt-4 flex flex-col justify-center gap-2">
-              <div className="px-2 text-xl font-semibold text-gray-800 ">
-                Bradesco
-              </div>
-              <HighDisponibilityMini />
-            </div>
-          </button>
-          <button
-            className="flex flex-col items-center justify-center"
-            onClick={() => handleCardSelect(ECard.NUBANK)}
-          >
-            <Image
-              src={"/images/nubank.png"}
-              alt="card"
-              className="shadow-outline-custom"
-              height={150}
-              width={150}
-            />
-            <div className="mt-4 flex flex-col justify-center gap-2">
-              <div className="px-2 text-center text-xl font-semibold text-gray-800 ">
+              <div className="px-2 text-xl font-semibold text-gray-800  ">
                 Nubank
               </div>
+              <div className="text-xl font-bold text-emerald-500"> R$100</div>
               <HighDisponibilityMini />
             </div>
           </button>
           <button
             className="flex flex-col items-center justify-center"
-            onClick={() => handleCardSelect(ECard.ITAU)}
+            onClick={() => handleProductSelect(ELara.PICPAY, 100)}
           >
             <Image
-              src={"/images/itau.png"}
+              src={"/images/picpay-lara.png"}
               alt="card"
-              className="shadow-outline-custom"
+              className="rounded-xl shadow-outline-custom"
               height={150}
               width={150}
             />
             <div className="mt-4 flex flex-col justify-center gap-2">
-              <div className="px-2 text-center text-xl font-semibold text-gray-800 ">
+              <div className="px-2 text-center text-xl font-semibold text-gray-800  ">
+                Picpay
+              </div>
+              <div className="text-xl font-bold text-emerald-500"> R$100</div>
+              <HighDisponibilityMini />
+            </div>
+          </button>
+          <button
+            className="flex flex-col items-center justify-center"
+            onClick={() => handleProductSelect(ELara.ITAU, 150)}
+          >
+            <Image
+              src={"/images/itau-lara.png"}
+              alt="card"
+              className="rounded-xl shadow-outline-custom"
+              height={150}
+              width={150}
+            />
+            <div className="mt-4 flex flex-col justify-center gap-2">
+              <div className="px-2 text-center text-xl font-semibold text-gray-800  ">
                 Itaú
               </div>
+              <div className="text-xl font-bold text-emerald-500"> R$150</div>
               <MediumDisponibilityMini />
             </div>
           </button>
           <button
             className="flex flex-col items-center justify-center"
-            onClick={() => handleCardSelect(ECard.C6)}
+            onClick={() => handleProductSelect(ELara.PAGBANK, 100)}
           >
             <Image
-              src={"/images/c6.png"}
+              src={"/images/pagbank-lara.png"}
               alt="card"
-              className="shadow-outline-custom"
+              className="rounded-xl shadow-outline-custom"
               height={150}
               width={150}
             />
             <div className="mt-4 flex flex-col justify-center gap-2">
-              <div className="px-2 text-center text-xl font-semibold text-gray-800 ">
-                C6
+              <div className="px-2 text-center text-xl font-semibold text-gray-800  ">
+                PagBank
               </div>
+              <div className="text-xl font-bold text-emerald-500"> R$100</div>
               <HighDisponibilityMini />
-            </div>
-          </button>
-          <button
-            className="flex flex-col items-center justify-center"
-            onClick={() => handleCardSelect(ECard.SX)}
-          >
-            <Image
-              src={"/images/sx.png"}
-              alt="card"
-              className="shadow-outline-custom"
-              height={150}
-              width={150}
-            />
-            <div className="mt-4 flex flex-col justify-center gap-2">
-              <div className="px-2 text-center text-xl font-semibold text-gray-800 ">
-                SX
-              </div>
-              <HighDisponibilityMini />
-            </div>
-          </button>
-          <button
-            className="flex flex-col items-center justify-center"
-            onClick={() => handleCardSelect(ECard.OUROCARD)}
-          >
-            <Image
-              src={"/images/ourocard.webp"}
-              alt="card"
-              className="shadow-outline-custom"
-              height={150}
-              width={150}
-            />
-            <div className="mt-4 flex flex-col justify-center gap-2">
-              <div className="px-2 text-center text-xl font-semibold text-gray-800 ">
-                Ourocard - BB
-              </div>
-              <LowDisponibilityMini />
             </div>
           </button>
         </div>

@@ -11,8 +11,6 @@ import { ECard } from "~/enums/EBank";
 import { EDisponibility } from "~/enums/EDisponibilty";
 import { Footer } from "../../../components/Footer";
 
-import { PrismaClient } from "@prisma/client/edge";
-
 export default function Home() {
   const router = useRouter();
   const disponibilities: Record<ECard, EDisponibility> = useMemo(() => {
@@ -74,24 +72,13 @@ export default function Home() {
     }, 1500);
   }, [disponibilities]);
 
-  const prismatest = async () => {
-    const prisma = new PrismaClient();
-    const data = await prisma.qRCode.findMany();
-    console.log(data);
-    await prisma.$disconnect();
-  };
-
-  useEffect(() => {
-    void prismatest();
-  }, []);
-
   return (
     <>
       <Head>
         <title>App - Fornecedor7 </title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex min-h-screen flex-col items-center justify-center gap-8 bg-gray-100">
+      <main className="flex min-h-screen flex-col items-center justify-center gap-8 ">
         <div className="mt-[50px] flex flex-col items-center justify-center">
           <Image
             src={"/images/card2.png"}

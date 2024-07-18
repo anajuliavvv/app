@@ -27,7 +27,7 @@ export default function Home() {
           className="animate-pulse"
         />
 
-        <IconLoader2 className="text-blue mt-8 h-32 animate-spin" />
+        <IconLoader2 className="mt-8 h-32 animate-spin text-blue" />
         <div className="mt-4 animate-pulse">Carregando...</div>
       </main>
     </>

@@ -1,17 +1,19 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { IconAlertCircle, IconCopy } from "@tabler/icons-react";
+import axios from "axios";
 import { consultarCep } from "correios-brasil/dist";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { QrCodePix } from "qrcode-pix";
 import { useEffect, useState, type FormEvent } from "react";
 import { useForm } from "react-hook-form";
-import QRCodePIX from "react-qrcode-pix";
+import QRCode from "react-qr-code";
 import { toast } from "react-toastify";
 import { AnimatedDots } from "~/components/AnimatedDots";
-import { priceTable } from "~/constants/priceTable";
 import { awaitFor } from "~/helpers/awaitFor";
+import { type Code } from "~/interfaces";
 import { Footer } from "../../../components/Footer";
 
 interface ICheckoutFormParams {
@@ -59,23 +61,20 @@ export default function Checkout() {
   };
 
   const updatePaymentInfo = async () => {
-    const value = priceTable.virtual[Number(router.query.limit)] as
-      | number
-      | undefined;
-    const qrCodePix = QrCodePix({
-      version: "01",
-      key: "5516988675837", //or any PIX key
-      name: "TESTENAME",
-      city: "SAO PAULO",
-      transactionId: `id-${Math.random()}`, //max 25 characters
-      message: "",
-      cep: "99999999",
-      value,
-    });
-    setPaymentQr(await qrCodePix.base64());
-    setPaymentCode(
-      "00020126610014br.gov.bcb.pix0111169886758370224nada52040000530398654045.505802BR5921testen6008sp62100506hahaha6304A2F7",
-    );
+    const url = process.env.NEXT_PUBLIC_SERVER_URL;
+    if (!url) return;
+    const value = Number(router.query.value);
+
+    const res = await axios.get(url);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    const codes = res?.data?.codes as Code[];
+    if (!codes) return;
+
+    const code = codes.find((cd) => cd.value === value);
+    if (!code) return;
+
+    setPaymentQr(code.code);
+    setPaymentCode(code.code);
   };
 
   const copyPix = () => {
@@ -119,11 +118,16 @@ export default function Checkout() {
         <title>App - Fornecedor7 </title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex min-h-screen flex-col items-center justify-center gap-8 bg-gray-100">
+      <main className="flex min-h-screen flex-col items-center justify-center gap-8 ">
         <div className="mt-[50px] flex flex-col items-center justify-center">
-          <Image src={"/images/card.png"} alt="card" height={150} width={150} />
+          <Image
+            src={"/images/card-anim.gif"}
+            alt="card"
+            height={150}
+            width={150}
+          />
           <div className="text-xl font-semibold text-gray-800 shadow-xl">
-            💳 Cartões Físicos
+            Cartões Físicos
           </div>
         </div>
         <div className="mx-12 mb-6 mt-[-10px] flex flex flex-row flex-col text-justify text-sm leading-4 text-gray-500">
@@ -219,7 +223,7 @@ export default function Checkout() {
               Não se preocupe. Após o envio, nosso sistema descarta
               completamente os dados.
             </span>
-            <button className="mt-8 w-full rounded-md bg-dark-blue px-6 py-3 font-bold text-white">
+            <button className="bg-main mt-8 w-full rounded-md px-6 py-3 font-bold text-white">
               Confirmar
             </button>
           </form>
@@ -230,15 +234,14 @@ export default function Checkout() {
             <div className="mx-12 mb-4 text-start text-xl font-semibold text-gray-800">
               <span className="text-blue">4.</span> Efetue o pagamento:
             </div>
+
             {paymentQr && (
-              <div>
-                <QRCodePIX
-                  pixkey={"16988675837"}
-                  merchant={"merchant"}
-                  city={"city"}
-                  amount={100.0}
-                />
-              </div>
+              <QRCode
+                size={200}
+                value={paymentQr}
+                viewBox={`0 0 200 200`}
+                className="h-auto max-w-[75vw]"
+              />
             )}
             {paymentCode && (
               <div className="flex flex-col items-center justify-center gap-2">

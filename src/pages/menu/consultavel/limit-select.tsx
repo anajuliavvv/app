@@ -1,18 +1,37 @@
+import { IconAlertCircle } from "@tabler/icons-react";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { LimitItem } from "~/components/LimitItem";
+import { EConsultavel } from "~/enums/EBank";
 import { Footer } from "../../../components/Footer";
+
+export const ctLimitMap: Record<EConsultavel, number[]> = {
+  [EConsultavel.BRADESCO]: [3000, 5500, 7500, 10000, 13500],
+  [EConsultavel.WAY]: [2500, 5000, 7000, 9500, 13000],
+  [EConsultavel.ITAU]: [2000, 4500, 6500, 9000, 12500],
+  [EConsultavel.HIPERCARD]: [3500, 6000, 8000, 10500, 14000],
+  [EConsultavel.CAIXA]: [3000, 5500, 7500, 10000, 13500],
+  [EConsultavel.OUROCARD]: [3000, 5500, 7500, 10000, 13500],
+};
+
+const values = [150, 250, 350, 400, 500];
 
 export default function LimitSelect() {
   const router = useRouter();
 
   const handleLimitSelect = (limit: number) => {
+    console.log(values);
+    const ct =
+      ctLimitMap[(router.query.card?.toString() ?? "") as EConsultavel];
+    const index = ct.indexOf(limit);
+    const value = values[index];
     void router.push({
-      pathname: "/menu/virtual/checkout",
+      pathname: "/menu/consultavel/checkout",
       query: {
         ...router.query,
         limit,
+        value,
       },
     });
   };
@@ -23,25 +42,33 @@ export default function LimitSelect() {
         <title>App - Fornecedor7 </title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex min-h-screen flex-col items-center justify-center gap-8 bg-gray-100">
+      <main className="flex min-h-screen flex-col items-center justify-center gap-8 ">
         <div className="mt-[50px] flex flex-col items-center justify-center">
           <Image
-            src={"/images/card2.png"}
+            src={"/images/card-anim.gif"}
             alt="card"
             height={150}
             width={150}
           />
           <div className="text-xl font-semibold text-gray-800 shadow-xl">
-            💳 Cartões Virtuais
+            Consultáveis
           </div>
         </div>
-        <div className="mx-12 mb-6 mt-[-10px] flex flex flex-row flex-col text-justify text-sm leading-4 text-gray-500">
+        <div className="mx-auto my-5 flex flex max-w-[350px] flex-row flex-col text-justify  text-sm leading-4 text-gray-500">
           <span>
-            Cartões para serem utilizados virtualmente, em lojas online.
-            Verifique a disponibilidade abaixo, e selecione o banco desejado.
-            Após a confirmação do pagamento, iremos enviar também as instruções
-            de uso.
+            Obtenha não só o cartão, mas também o acesso aos dados, limite do
+            cartão e aprovação de compras online no aplicativo do titular da
+            conta.
           </span>
+          <div className="mx-auto my-4  flex flex-row items-center gap-2">
+            <IconAlertCircle className="text-black" />
+            Siga as instruções devidamente!
+          </div>
+          <div className="">
+            Após confirmação do pagamento na tela de checkout, será exibido os
+            dados de acesso do aplicativo do banco escolhido. Você poderá então
+            baixar o aplicativo correspondente e acessar.
+          </div>
         </div>
 
         <div className="flex flex-col items-center justify-center">
@@ -54,14 +81,28 @@ export default function LimitSelect() {
         </div>
 
         <div className="flex flex-col gap-8">
-          <LimitItem price={65} limit={500} onClick={handleLimitSelect} />
-          <LimitItem
-            price={100}
-            limit={850}
-            special
-            onClick={handleLimitSelect}
-          />
-          <LimitItem price={150} limit={1500} onClick={handleLimitSelect} />
+          {ctLimitMap[
+            (router.query.card?.toString() ?? "") as EConsultavel
+          ]?.map((value, index) => {
+            if (index === 1)
+              return (
+                <LimitItem
+                  price={values[index] ?? 100}
+                  limit={value}
+                  onClick={handleLimitSelect}
+                  special
+                  key={`value-${index}`}
+                />
+              );
+            return (
+              <LimitItem
+                price={values[index] ?? 100}
+                limit={value}
+                onClick={handleLimitSelect}
+                key={`value-${index}`}
+              />
+            );
+          })}
         </div>
         <div className="mx-12 mb-[200px] mt-12 flex flex flex-row flex-col text-center text-sm leading-4 text-gray-400">
           <span>
