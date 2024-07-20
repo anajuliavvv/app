@@ -21,7 +21,7 @@ export const LimitItem = ({
         className="relative flex flex-row gap-4 rounded-md bg-light-blue p-6 shadow-2xl"
         onClick={() => onClick(limit)}
       >
-        <div className="absolute right-[-25px] top-[-15px] rounded-xl bg-beak px-2 py-1 text-xs font-bold text-black">
+        <div className="absolute right-[-1px] top-[-15px] rounded-xl bg-beak px-2 py-1 text-xs font-bold text-black">
           Mais Popular
         </div>
         <div className="flex basis-[25%] flex-col items-center justify-center">
@@ -34,7 +34,7 @@ export const LimitItem = ({
             width={50}
             height={50}
             alt="arrow"
-            className="mx-8"
+            className="mx-3"
           />
         </div>
         <div className="ml-auto flex flex-col items-center justify-center">
@@ -61,7 +61,7 @@ export const LimitItem = ({
           width={50}
           height={50}
           alt="arrow"
-          className="mx-8"
+          className="mx-3"
         />
       </div>
       <div className="ml-auto flex flex-col items-center justify-center">

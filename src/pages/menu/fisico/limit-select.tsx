@@ -69,7 +69,7 @@ export default function LimitSelect() {
           <div className="">✅ {router.query.card}</div>
         </div>
 
-        <div className="mx-12 mb-4 text-start text-xl font-semibold text-gray-800">
+        <div className="mx-12 mb-4 text-center text-xl font-semibold text-gray-800">
           <span className="text-blue">3.</span> Selecione o limite desejado:
         </div>
 

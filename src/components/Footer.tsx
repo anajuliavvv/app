@@ -10,10 +10,10 @@ export const Footer = () => {
   };
 
   return (
-    <div className="bg-main title fixed bottom-0 flex w-full flex-row px-4 py-3 text-center font-bold tracking-wider text-white">
-      <div className="mr-auto">
+    <div className="title fixed bottom-0 flex w-full flex-row bg-main px-4 py-3 text-center font-bold tracking-wider text-white">
+      <Link className="mr-auto" href={"https://instagram.com/fornecedor_app7/"}>
         <IconBrandInstagram />
-      </div>
+      </Link>
       <Link href={"/menu"}>Fornecedor7</Link>
       <div className="ml-auto" onClick={handleBack}>
         <IconArrowBackUp />

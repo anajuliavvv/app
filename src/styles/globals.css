@@ -33,3 +33,19 @@ body {
     background-color: white;
   }
 }
+
+.animate_text {
+  animation: animate_text 1s infinite alternate;
+}
+
+@keyframes animate_text {
+  from {
+    scale: 1;
+    color: #7e78d2;
+  }
+
+  to {
+    scale: 1.02;
+    color: #544eaa;
+  }
+}

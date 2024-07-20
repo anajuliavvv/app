@@ -45,7 +45,7 @@ export default function LimitSelect() {
       <main className="flex min-h-screen flex-col items-center justify-center gap-8 ">
         <div className="mt-[50px] flex flex-col items-center justify-center">
           <Image
-            src={"/images/card-anim.gif"}
+            src={"/images/ct-anim.gif"}
             alt="card"
             height={150}
             width={150}
@@ -76,7 +76,7 @@ export default function LimitSelect() {
           <div className="">✅ {router.query.card}</div>
         </div>
 
-        <div className="mx-12 mb-4 text-start text-xl font-semibold text-gray-800">
+        <div className="mx-12 mb-4 text-center text-xl font-semibold text-gray-800">
           <span className="text-blue">3.</span> Selecione o limite desejado:
         </div>
 

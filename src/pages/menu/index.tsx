@@ -1,4 +1,3 @@
-import axios from "axios";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -54,7 +53,7 @@ export default function Home() {
         className="last-sale mb-1 flex w-full flex-row justify-between gap-3 border-b border-gray-200"
         key={`sale-${sale.time}`}
       >
-        <span className="text-main font-semibold">
+        <span className="font-semibold text-main">
           {sale.saleTimeString.slice(0, 5)}
         </span>
         <span className="font-semibold">{sale.name}</span>
@@ -62,19 +61,6 @@ export default function Home() {
       </div>
     ));
   }, [timeDisplay]);
-
-  const getData = async () => {
-    const url = process.env.NEXT_PUBLIC_SERVER_URL;
-    if (!url) return;
-    const res = await axios.get(url);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const data = res.data;
-    console.log(data);
-  };
-
-  useEffect(() => {
-    void getData();
-  });
 
   useEffect(() => {
     void handleHours();
@@ -94,15 +80,15 @@ export default function Home() {
           height={300}
           width={300}
         />
-        <div className="mx-auto mb-4 max-w-[80vw] border-b border-blue px-8 pb-2 text-center font-semibold text-gray-400">
+        <div className="mx-auto mb-4 max-w-[80vw] border-b border-blue px-8 pb-2 text-center text-xs font-semibold text-gray-400">
           Entregando qualidade desde 2022.
         </div>
         <div className="mx-auto flex w-full max-w-[80vw] flex-col items-center justify-center p-4">
-          <div className="flex flex-row items-center justify-start">
-            <span className="text-sm font-semibold text-gray-800">
+          <div className="flex flex-row items-center justify-start text-xs">
+            <span className=" font-semibold text-gray-800">
               🕑 {timeDisplay}{" "}
             </span>
-            <span className="mx-auto text-sm font-semibold text-gray-800">
+            <span className="mx-auto  font-semibold text-gray-800">
               {" "}
               - Últimas compras:
             </span>
@@ -111,8 +97,8 @@ export default function Home() {
             {lastSales}
           </div>
         </div>
-        <div className="my-12 text-2xl font-bold text-blue">
-          <span className="text-blue"></span> Serviços Disponíveis:
+        <div className="animate_text mb-5 mt-3 text-2xl font-extrabold">
+          Serviços Disponíveis:
         </div>
         <div className="mb-24 grid grid-cols-2 gap-8 px-6">
           <Link
@@ -125,21 +111,21 @@ export default function Home() {
               height={100}
               width={100}
             />
-            <div className="mt-2 text-sm font-semibold text-gray-800 ">
+            <div className="mt-2 text-center text-sm font-semibold text-gray-800 ">
               Cartões Físicos
             </div>
           </Link>
           <Link
             href={"/menu/consultavel"}
-            className="flex flex-col items-center justify-center rounded-lg bg-white p-4 shadow-2xl"
+            className="flex h-full flex-col items-center justify-end rounded-lg bg-white p-4 shadow-2xl"
           >
             <Image
-              src={"/images/card-anim.gif"}
+              src={"/images/ct-anim.gif"}
               alt="card"
               height={100}
               width={100}
             />
-            <div className="mt-2 text-sm font-semibold text-gray-800 ">
+            <div className="mt-5 text-sm font-semibold text-gray-800 ">
               Consultáveis
             </div>
           </Link>
@@ -154,7 +140,7 @@ export default function Home() {
               width={100}
               className="h-[84px] w-[100px]"
             />
-            <div className="mt-2 text-sm font-semibold text-gray-800">
+            <div className="mt-2 text-center text-sm font-semibold text-gray-800">
               Virada de Saldo
             </div>
           </Link>

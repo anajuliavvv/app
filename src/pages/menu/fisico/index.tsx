@@ -35,7 +35,7 @@ export default function Home() {
             height={150}
             width={150}
           />
-          <div className="text-xl font-semibold text-gray-800">
+          <div className="text-center text-xl font-semibold text-gray-800">
             Cartões Físicos
           </div>
         </div>
@@ -50,7 +50,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="mx-12 mb-4 text-start text-xl font-semibold text-gray-800">
+        <div className="mx-12 mb-4 text-center text-xl font-semibold text-gray-800">
           <span className="text-blue">2.</span> Selecione dentre as opções:
         </div>
 

@@ -223,7 +223,7 @@ export default function Checkout() {
               Não se preocupe. Após o envio, nosso sistema descarta
               completamente os dados.
             </span>
-            <button className="bg-main mt-8 w-full rounded-md px-6 py-3 font-bold text-white">
+            <button className="mt-8 w-full rounded-md bg-main px-6 py-3 font-bold text-white">
               Confirmar
             </button>
           </form>
@@ -244,8 +244,11 @@ export default function Checkout() {
               />
             )}
             {paymentCode && (
-              <div className="flex flex-col items-center justify-center gap-2">
-                <div className="flex flex-row gap-2" onClick={copyPix}>
+              <button
+                className="flex flex-col items-center justify-center gap-2"
+                onClick={copyPix}
+              >
+                <div className="flex flex-row gap-2">
                   <IconCopy />
                   <span className="text-sm">
                     {" "}
@@ -255,7 +258,7 @@ export default function Checkout() {
                 <span className="border-b border-blue text-sm text-blue">
                   Código Pix
                 </span>
-              </div>
+              </button>
             )}
           </div>
         )}

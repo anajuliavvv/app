@@ -82,7 +82,7 @@ export default function Checkout() {
       <main className="flex min-h-screen flex-col items-center justify-center gap-8 ">
         <div className="mt-[50px] flex flex-col items-center justify-center">
           <Image
-            src={"/images/card-anim.gif"}
+            src={"/images/ct-anim.gif"}
             alt="card"
             height={150}
             width={150}
@@ -146,8 +146,11 @@ export default function Checkout() {
               />
             )}
             {paymentCode && (
-              <div className="flex flex-col items-center justify-center gap-2">
-                <div className="flex flex-row gap-2" onClick={copyPix}>
+              <button
+                className="flex flex-col items-center justify-center gap-2"
+                onClick={copyPix}
+              >
+                <div className="flex flex-row gap-2">
                   <IconCopy />
                   <span className="text-sm">
                     {" "}
@@ -157,7 +160,7 @@ export default function Checkout() {
                 <span className="border-b border-blue text-sm text-blue">
                   Código Pix
                 </span>
-              </div>
+              </button>
             )}
           </div>
         )}
