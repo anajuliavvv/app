@@ -100,7 +100,7 @@ export default function Home() {
         <div className="animate_text mb-5 mt-3 text-2xl font-extrabold">
           Serviços Disponíveis:
         </div>
-        <div className="mb-24 grid grid-cols-2 gap-8 px-6">
+        <div className="mb-6 grid grid-cols-2 gap-8 px-6">
           <Link
             href={"/menu/fisico"}
             className="flex flex-col items-center justify-center rounded-lg bg-white p-4 shadow-2xl"
@@ -159,6 +159,16 @@ export default function Home() {
             </div>
           </Link>
         </div>
+        <div className="mb-24 mt-6 flex w-full flex-row items-center justify-center gap-8  p-6">
+          <Image src={"/images/ssl.png"} alt="badge" height={100} width={100} />
+          <Image
+            src={"/images/compra-safe.png"}
+            alt="badge"
+            height={100}
+            width={100}
+          />
+        </div>
+
         <Footer />
       </main>
     </>

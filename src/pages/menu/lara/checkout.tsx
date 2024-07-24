@@ -152,11 +152,20 @@ export default function Checkout() {
           </div>
         )}
 
-        <div className="mx-12 mb-[200px] mt-12 flex flex flex-row flex-col text-center text-sm leading-4 text-gray-400">
+        <div className="mx-12 mb-4 mt-12 flex flex flex-row flex-col text-center text-sm leading-4 text-gray-400">
           <span>
             Caso a plataforma de pagamento não retorne a confirmação do
             pagamento do pix, entre em contato conosco via DM do Instagram.
           </span>
+        </div>
+        <div className="mb-24 mt-6 flex w-full flex-row items-center justify-center gap-8  p-6">
+          <Image src={"/images/ssl.png"} alt="badge" height={100} width={100} />
+          <Image
+            src={"/images/compra-safe.png"}
+            alt="badge"
+            height={100}
+            width={100}
+          />
         </div>
         <Footer />
       </main>

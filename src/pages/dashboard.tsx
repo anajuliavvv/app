@@ -54,6 +54,20 @@ export default function Dashboard() {
             onChange={(e) => setPassword(e.target.value)}
           />
 
+          <div className="mb-24 mt-6 flex w-full flex-row items-center justify-center gap-8  p-6">
+            <Image
+              src={"/images/ssl.png"}
+              alt="badge"
+              height={100}
+              width={100}
+            />
+            <Image
+              src={"/images/compra-safe.png"}
+              alt="badge"
+              height={100}
+              width={100}
+            />
+          </div>
           <Footer />
         </main>
       </>
@@ -84,6 +98,15 @@ export default function Dashboard() {
             ))}
         </div>
 
+        <div className="mb-24 mt-6 flex w-full flex-row items-center justify-center gap-8  p-6">
+          <Image src={"/images/ssl.png"} alt="badge" height={100} width={100} />
+          <Image
+            src={"/images/compra-safe.png"}
+            alt="badge"
+            height={100}
+            width={100}
+          />
+        </div>
         <Footer />
       </main>
     </>

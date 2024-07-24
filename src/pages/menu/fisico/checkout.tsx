@@ -33,6 +33,7 @@ export default function Checkout() {
   const [payment, setPayment] = useState(false);
   const [paymentQr, setPaymentQr] = useState<string>();
   const [paymentCode, setPaymentCode] = useState<string>();
+  const [showDelivery, setShowDelivery] = useState<number>();
   const router = useRouter();
 
   const { register, getValues, watch, setValue } =
@@ -98,7 +99,30 @@ export default function Checkout() {
     setValue("neighbourhood", cepInfo.bairro);
     setValue("city", cepInfo.localidade);
     setValue("uf", cepInfo.uf);
+    if (!cepInfo.localidade) return;
+    const shipDays = getShippingDays(cep.toString());
+    setShowDelivery(shipDays);
   };
+
+  function getShippingDays(cep: string): number | undefined {
+    if (cep.length < 5) {
+      return;
+    }
+    const firstDigs = parseInt(cep.substring(0, 2), 10);
+    let days = 10;
+    if (firstDigs >= 1 && firstDigs <= 29) {
+      days = 3;
+    } else if (firstDigs >= 80 && firstDigs <= 99) {
+      days = 4;
+    } else if (firstDigs >= 70 && firstDigs <= 79) {
+      days = 4;
+    } else if (firstDigs >= 40 && firstDigs <= 65) {
+      days = 5;
+    } else if (firstDigs >= 68 && firstDigs <= 69) {
+      days = 5;
+    }
+    return days;
+  }
 
   const handleFormSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -229,6 +253,19 @@ export default function Checkout() {
           </form>
         )}
 
+        {showDelivery && (
+          <div className="flex flex-col items-center justify-center gap-1">
+            <Image
+              src={"/images/delivery.png"}
+              width={150}
+              height={150}
+              alt="shipping"
+              className="animate-pulse"
+            />
+            🚚 Entrega em {showDelivery} dias.
+          </div>
+        )}
+
         {payment && (
           <div className="flex flex-col items-center justify-center">
             <div className="mx-12 mb-4 text-start text-xl font-semibold text-gray-800">
@@ -263,11 +300,20 @@ export default function Checkout() {
           </div>
         )}
 
-        <div className="mx-12 mb-[200px] mt-12 flex flex flex-row flex-col text-center text-sm leading-4 text-gray-400">
+        <div className="mx-12 mb-4 mt-12 flex flex flex-row flex-col text-center text-sm leading-4 text-gray-400">
           <span>
             Caso a plataforma de pagamento não retorne a confirmação do
             pagamento do pix, entre em contato conosco via DM do Instagram.
           </span>
+        </div>
+        <div className="mb-24 mt-6 flex w-full flex-row items-center justify-center gap-8  p-6">
+          <Image src={"/images/ssl.png"} alt="badge" height={100} width={100} />
+          <Image
+            src={"/images/compra-safe.png"}
+            alt="badge"
+            height={100}
+            width={100}
+          />
         </div>
         <Footer />
       </main>
