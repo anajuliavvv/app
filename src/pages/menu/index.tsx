@@ -27,22 +27,38 @@ export default function Home() {
     const weekDay = date.getDay();
     const entries = Object.entries(sales);
 
-    let validSales: (ISale & { time: number; saleTimeString: string })[] = [];
+    let validSales: (ISale & {
+      time: number;
+      saleTimeString: string;
+      saleDay: string;
+    })[] = [];
     for (const [dateString, sale] of entries) {
       const [saleWeekDayString, saleTimeString] = dateString.split("T");
       if (!saleTimeString) continue;
       const saleWeekDay = Number(saleWeekDayString);
+      const saleDayText = (): string => {
+        if (saleWeekDay === 0) return "Dom";
+        if (saleWeekDay === 1) return "Seg";
+        if (saleWeekDay === 2) return "Ter";
+        if (saleWeekDay === 3) return "Qua";
+        if (saleWeekDay === 4) return "Qui";
+        if (saleWeekDay === 5) return "Sex";
+        if (saleWeekDay === 6) return "Sab";
+        return "?";
+      };
       if (saleWeekDay > weekDay) continue;
       const timeStrings = saleTimeString.split(":");
       const hours = Number(timeStrings[0]);
       const minutes = Number(timeStrings[1]);
       const seconds = Number(timeStrings[2]);
+      if (saleWeekDay === weekDay && hours >= date.getHours()) continue;
       const time =
         seconds + 60 * minutes + 3600 * hours + saleWeekDay * 24 * 3600;
       validSales.push({
         saleTimeString,
         time,
         ...sale,
+        saleDay: saleDayText(),
       });
     }
 
@@ -50,14 +66,17 @@ export default function Home() {
 
     return validSales.map((sale) => (
       <div
-        className="last-sale mb-1 flex w-full flex-row justify-between gap-3 border-b border-gray-200"
+        className="last-sale mb-1 grid w-full grid-cols-5 items-center justify-between gap-3 border-b border-gray-200"
         key={`sale-${sale.time}`}
       >
-        <span className="font-semibold text-main">
-          {sale.saleTimeString.slice(0, 5)}
+        <span className="text-xs font-semibold text-white">
+          {sale.saleDay} {sale.saleTimeString.slice(0, 5)}
         </span>
-        <span className="font-semibold">{sale.name}</span>
-        <span> R${sale.value}</span>
+        <span className="col-span-2 text-sm font-semibold">{sale.name}</span>
+        <div className="col-span-2 ml-auto text-end text-white">
+          {" "}
+          R${sale.value}
+        </div>
       </div>
     ));
   }, [timeDisplay]);
@@ -93,7 +112,7 @@ export default function Home() {
               - Últimas compras:
             </span>
           </div>
-          <div className="flex w-full max-w-[80vw] flex-col rounded-md p-4 shadow-2xl">
+          <div className="flex w-full max-w-[80vw] flex-col rounded-md bg-gradient-to-b from-blue to-[mediumslateblue]  p-4 shadow-2xl">
             {lastSales}
           </div>
         </div>
@@ -113,6 +132,20 @@ export default function Home() {
             />
             <div className="mt-2 text-center text-sm font-semibold text-gray-800 ">
               Cartões Físicos
+            </div>
+          </Link>
+          <Link
+            href={"/menu/notas"}
+            className="flex h-full flex-col items-center justify-end rounded-lg bg-white p-4 shadow-2xl"
+          >
+            <Image
+              src={"/images/cash.gif"}
+              alt="card"
+              height={100}
+              width={100}
+            />
+            <div className="mt-5 text-sm font-semibold text-gray-800 ">
+              Notas Falsas
             </div>
           </Link>
           <Link
@@ -145,7 +178,7 @@ export default function Home() {
             </div>
           </Link>
           <Link
-            className="flex flex-col items-center justify-center rounded-lg bg-white p-4 shadow-2xl"
+            className="col-span-2 flex hidden flex-col items-center justify-center rounded-lg bg-white p-4 shadow-2xl"
             href={"/menu/lara"}
           >
             <Image
