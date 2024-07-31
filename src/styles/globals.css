@@ -21,7 +21,7 @@ body {
 }
 
 .last-sale {
-  animation: sale-pop-up 1s normal 0.2s;
+
 }
 
 @keyframes sale-pop-up {
