@@ -50,13 +50,13 @@ export default function Checkout() {
     await awaitFor(2000);
     setLoadingChecks((prev) => [
       ...prev,
-      <div key={Math.random()}>✅ Cartão requirido encontrado</div>,
+      <div key={Math.random()}>✅ Pedido solicitado</div>,
     ]);
     setLoadingText("Fazendo testes");
     await awaitFor(2500);
     setLoadingChecks((prev) => [
       ...prev,
-      <div key={Math.random()}>✅ Cartão verificado</div>,
+      <div key={Math.random()}>✅ Pedido registro</div>,
     ]);
 
     setReady(true);
